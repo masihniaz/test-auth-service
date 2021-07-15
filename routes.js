@@ -11,14 +11,23 @@ const {
   getUserRoles,
   checkUserPermissions,
 } = require("./controllers");
-const { signupValidator, loginValidator } = require("./validators");
+const {
+  signupValidator,
+  loginValidator,
+  permissionValidator,
+} = require("./validators");
 const { checkValidation } = require("./middlewares");
 
 router.post("/signup", signupValidator, checkValidation, signup);
 
 router.post("/login", loginValidator, checkValidation, login);
 
-router.post("/permissions", createPermission);
+router.post(
+  "/permissions",
+  permissionValidator,
+  checkValidation,
+  createPermission
+);
 
 router.get("/permissions", getPermissions);
 

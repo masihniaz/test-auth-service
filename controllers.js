@@ -1,9 +1,9 @@
-const { User } = require("./models");
+const { User, Permission } = require("./models");
 const { Op } = require("sequelize");
 const jwt = require("jsonwebtoken");
 
 exports.signup = async (req, res) => {
-  const { email, username } = req.body;
+  const { email, username, password } = req.body;
   try {
     let user = await User.findOne({
       where: { [Op.or]: [{ email }, { username }] },
@@ -11,11 +11,11 @@ exports.signup = async (req, res) => {
 
     if (user) {
       return res.status(409).json({
-        error: `user with email address: ${req.body.email} or username: ${username} already exists`,
+        error: `User with email address: "${email}" or username: "${username}" already exists`,
       });
     }
 
-    user = await User.create(req.body);
+    user = await User.create({ email, username, password });
     await user.save();
     const { id, createdAt, updatedAt } = user;
     return res.status(201).json({ id, username, email, createdAt, updatedAt });
@@ -60,12 +60,28 @@ exports.login = async (req, res) => {
   return res.status(200).json({ access_token });
 };
 
-exports.createPermission = (req, res) => {
-  res.send("create permission route");
+exports.createPermission = async (req, res) => {
+  const { name, code } = req.body;
+  let permission = await Permission.findOne({
+    where: { [Op.or]: [{ name }, { code }] },
+  });
+
+  if (permission) {
+    return res.status(409).json({
+      error: `Permission with name: "${name}" or code: "${code}" already exists`,
+    });
+  }
+
+  permission = await Permission.create({ name, code });
+  await permission.save();
+
+  return res.status(201).json(permission);
 };
 
-exports.getPermissions = (req, res) => {
-  res.send("get permissions route");
+exports.getPermissions = async (req, res) => {
+  const permissions = await Permission.findAll();
+
+  return res.status(200).json(permissions);
 };
 
 exports.createRole = (req, res) => {
