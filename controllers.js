@@ -1,4 +1,10 @@
-const { User, Permission, Role, RolePermission } = require("./models");
+const {
+  User,
+  Permission,
+  Role,
+  RolePermission,
+  UserRole,
+} = require("./models");
 const { Op } = require("sequelize");
 const jwt = require("jsonwebtoken");
 
@@ -143,12 +149,79 @@ exports.getRoles = async (req, res) => {
   return res.status(200).json(roles);
 };
 
-exports.addRoleToUser = (req, res) => {
-  res.send("add role to user route");
+exports.addRoleToUser = async (req, res) => {
+  const { roleIds } = req.body;
+  const { id: userId } = req.params;
+
+  let user = await User.findOne({
+    where: { id: userId },
+    attributes: [],
+    include: [
+      {
+        model: Role,
+        as: "roles",
+        attributes: ["id"],
+        through: {
+          attributes: [],
+        },
+      },
+    ],
+  });
+
+  for (let i = 0; i < roleIds.length; i++) {
+    for (let j = 0; j < user.roles.length; j++) {
+      if (roleIds[i] === user.roles[j].id) {
+        return res.status(409).json({
+          error: `User has already been assigned the role ID "${roleIds[i]}"`,
+        });
+      }
+    }
+  }
+
+  for (let i = 0; i < roleIds.length; i++) {
+    await UserRole.create({
+      userId,
+      roleId: roleIds[i],
+    });
+  }
+
+  user = await User.findOne({
+    where: { id: userId },
+    attributes: [],
+    include: [
+      {
+        model: Role,
+        as: "roles",
+        attributes: ["id", "code", "name"],
+        through: {
+          attributes: [],
+        },
+      },
+    ],
+  });
+
+  return res.status(201).json(user);
 };
 
-exports.getUserRoles = (req, res) => {
-  res.send("get user roles route");
+exports.getUserRoles = async (req, res) => {
+  const { id: userId } = req.params;
+
+  const user = await User.findOne({
+    where: { id: userId },
+    attributes: [],
+    include: [
+      {
+        model: Role,
+        as: "roles",
+        attributes: ["id", "code", "name"],
+        through: {
+          attributes: [],
+        },
+      },
+    ],
+  });
+
+  return res.status(200).json(user);
 };
 
 exports.checkUserPermissions = (req, res) => {

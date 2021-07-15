@@ -16,6 +16,7 @@ const {
   loginValidator,
   permissionValidator,
   roleValidator,
+  addUserRolesValidator,
 } = require("./validators");
 const { checkValidation } = require("./middlewares");
 
@@ -36,7 +37,12 @@ router.post("/roles", roleValidator, checkValidation, createRole);
 
 router.get("/roles", getRoles);
 
-router.post("/users/:id/roles", addRoleToUser);
+router.post(
+  "/users/:id/roles",
+  addUserRolesValidator,
+  checkValidation,
+  addRoleToUser
+);
 
 router.get("/users/:id/roles", getUserRoles);
 

@@ -35,5 +35,14 @@ module.exports = (sequelize, Sequelize) => {
     return bcrypt.compareSync(password, this.password);
   };
 
+  User.associate = function (models) {
+    // Role belongs to many users
+    User.belongsToMany(models.Role, {
+      as: "roles",
+      through: "user_roles",
+      foreignKey: "userId",
+    });
+  };
+
   return User;
 };

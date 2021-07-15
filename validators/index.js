@@ -3,4 +3,5 @@ module.exports = {
   loginValidator: require("./login"),
   permissionValidator: require("./permission"),
   roleValidator: require("./role"),
+  addUserRolesValidator: require("./add_user_roles"),
 };
