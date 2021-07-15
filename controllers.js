@@ -224,6 +224,71 @@ exports.getUserRoles = async (req, res) => {
   return res.status(200).json(user);
 };
 
-exports.checkUserPermissions = (req, res) => {
-  res.send("check user permission route");
+exports.checkUserPermissions = async (req, res) => {
+  const { permissionIds } = req.body;
+  const { id: userId } = req.params;
+
+  const user = await User.findOne({
+    where: { id: userId },
+    attributes: [],
+    include: [
+      {
+        model: Role,
+        as: "roles",
+        attributes: ["id"],
+        through: {
+          attributes: [],
+        },
+        include: {
+          model: Permission,
+          as: "permissions",
+          attributes: ["id", "code", "name"],
+          through: {
+            attributes: [],
+          },
+        },
+      },
+    ],
+  });
+
+  const allowedUserPermissions = {};
+
+  user.roles.forEach((role) => {
+    role.permissions.forEach((permission) => {
+      const { id, code, name } = permission;
+      if (!allowedUserPermissions[permission.id]) {
+        allowedUserPermissions[permission.id] = {
+          id,
+          code,
+          name,
+          allowed: true,
+        };
+      }
+    });
+  });
+
+  const notAllowedUserPermissionIds = [];
+
+  permissionIds.forEach((permissionId) => {
+    if (!allowedUserPermissions[permissionId]) {
+      notAllowedUserPermissionIds.push(permissionId);
+    }
+  });
+
+  const notAlloweduserPermissions = (
+    await Permission.findAll({
+      where: { id: notAllowedUserPermissionIds },
+      attributes: ["id", "code", "name"],
+    })
+  ).map((permission) => {
+    const { id, code, name } = permission;
+    return { id, code, name, allowed: false };
+  });
+
+  return res
+    .status(200)
+    .json([
+      ...Object.values(allowedUserPermissions),
+      ...Object.values(notAlloweduserPermissions),
+    ]);
 };

@@ -17,6 +17,7 @@ const {
   permissionValidator,
   roleValidator,
   addUserRolesValidator,
+  checkUserPermissionsValidator,
 } = require("./validators");
 const { checkValidation } = require("./middlewares");
 
@@ -46,6 +47,11 @@ router.post(
 
 router.get("/users/:id/roles", getUserRoles);
 
-router.post("/api/users/:id/permissions", checkUserPermissions);
+router.post(
+  "/users/:id/permissions",
+  checkUserPermissionsValidator,
+  checkValidation,
+  checkUserPermissions
+);
 
 module.exports = router;
