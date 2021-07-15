@@ -153,6 +153,12 @@ exports.addRoleToUser = async (req, res) => {
   const { roleIds } = req.body;
   const { id: userId } = req.params;
 
+  if (!userId) {
+    return res
+      .status(400)
+      .json({ error: `id is missing from the url parameters` });
+  }
+
   let user = await User.findOne({
     where: { id: userId },
     attributes: [],
@@ -205,6 +211,12 @@ exports.addRoleToUser = async (req, res) => {
 
 exports.getUserRoles = async (req, res) => {
   const { id: userId } = req.params;
+
+  if (!userId) {
+    return res
+      .status(400)
+      .json({ error: `id is missing from the url parameters` });
+  }
 
   const user = await User.findOne({
     where: { id: userId },
