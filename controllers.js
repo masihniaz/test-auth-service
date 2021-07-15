@@ -72,12 +72,14 @@ exports.createPermission = async (req, res) => {
 
   permission = await Permission.create({ name, code });
   await permission.save();
-
-  return res.status(201).json(permission);
+  const { id: pId, code: pCode, name: pName } = permission;
+  return res.status(201).json({ id: pId, code: pCode, name: pName });
 };
 
 exports.getPermissions = async (req, res) => {
-  const permissions = await Permission.findAll();
+  const permissions = await Permission.findAll({
+    attributes: ["id", "code", "name"],
+  });
 
   return res.status(200).json(permissions);
 };
@@ -107,55 +109,38 @@ exports.createRole = async (req, res) => {
 
   const createdRole = await Role.findOne({
     where: { id: role.id },
-    include: [{ model: Permission, as: "permissions" }],
+    attributes: ["id", "name", "code"],
+    include: [
+      {
+        model: Permission,
+        as: "permissions",
+        attributes: ["id", "code", "name"],
+        through: {
+          attributes: [],
+        },
+      },
+    ],
   });
 
-  const {
-    id: roleId,
-    code: roleCode,
-    name: roleName,
-    permissions: rolePermmissions,
-  } = createdRole;
-
-  return res.status(201).json({
-    id: roleId,
-    code: roleCode,
-    name: roleName,
-    permissions: rolePermmissions.map((permission) => {
-      const {
-        id: permissionId,
-        code: permissionCode,
-        name: permissionName,
-      } = permission;
-      return {
-        id: permissionId,
-        code: permissionCode,
-        name,
-        permissionName,
-      };
-    }),
-  });
+  return res.status(201).json(createdRole);
 };
 
 exports.getRoles = async (req, res) => {
   const roles = await Role.findAll({
-    include: [{ model: Permission, as: "permissions" }],
+    include: [
+      {
+        model: Permission,
+        as: "permissions",
+        attributes: ["id", "name", "code"],
+        through: {
+          attributes: [],
+        },
+      },
+    ],
+    attributes: ["id", "code", "name"],
   });
 
-  return res.status(200).json(
-    roles.map((role) => {
-      const { id, code, name, permissions } = role;
-      return {
-        id,
-        code,
-        name,
-        permissions: permissions.map((permission) => {
-          const { id, code, name } = permission;
-          return { id, code, name };
-        }),
-      };
-    })
-  );
+  return res.status(200).json(roles);
 };
 
 exports.addRoleToUser = (req, res) => {
