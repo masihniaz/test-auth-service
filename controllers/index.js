@@ -4,11 +4,11 @@ const {
   Role,
   RolePermission,
   UserRole,
-} = require("./models");
+} = require("../models");
 const { Op } = require("sequelize");
 const jwt = require("jsonwebtoken");
 const env = process.env.NODE_ENV || "development";
-const config = require("./config/config.json")[env];
+const config = require("../config/config.json")[env];
 
 exports.signup = async (req, res) => {
   const { email, username, password } = req.body;

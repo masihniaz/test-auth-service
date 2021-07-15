@@ -1,8 +1,5 @@
-const express = require("express");
-const router = express.Router();
+const router = require("express").Router();
 const {
-  signup,
-  login,
   createPermission,
   getPermissions,
   createRole,
@@ -10,20 +7,14 @@ const {
   addRoleToUser,
   getUserRoles,
   checkUserPermissions,
-} = require("./controllers");
+} = require("../controllers");
 const {
-  signupValidator,
-  loginValidator,
   permissionValidator,
   roleValidator,
   addUserRolesValidator,
   checkUserPermissionsValidator,
-} = require("./validators");
-const { checkValidation } = require("./middlewares");
-
-router.post("/signup", signupValidator, checkValidation, signup);
-
-router.post("/login", loginValidator, checkValidation, login);
+} = require("../validators");
+const { checkValidation } = require("../middlewares");
 
 router.post(
   "/permissions",
