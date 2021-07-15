@@ -1,4 +1,4 @@
-const { User, Permission } = require("./models");
+const { User, Permission, Role, RolePermission } = require("./models");
 const { Op } = require("sequelize");
 const jwt = require("jsonwebtoken");
 
@@ -17,8 +17,8 @@ exports.signup = async (req, res) => {
 
     user = await User.create({ email, username, password });
     await user.save();
-    const { id, createdAt, updatedAt } = user;
-    return res.status(201).json({ id, username, email, createdAt, updatedAt });
+    const { id } = user;
+    return res.status(201).json({ id, username, email });
   } catch (e) {
     console.log(e); // setup logger
     return res.status(500);
@@ -44,13 +44,11 @@ exports.login = async (req, res) => {
     return res.status(400).json({ error: "Incorrect username or password." });
   }
 
-  const { id, email, createdAt, updatedAt } = user;
+  const { id, email } = user;
   const payload = {
     sub: id,
     username,
     email,
-    createdAt,
-    updatedAt,
   };
 
   // load jwt secret from env later on
@@ -84,12 +82,80 @@ exports.getPermissions = async (req, res) => {
   return res.status(200).json(permissions);
 };
 
-exports.createRole = (req, res) => {
-  res.send("create role route");
+exports.createRole = async (req, res) => {
+  const { code, name, permissionIds } = req.body;
+
+  let role = await Role.findOne({
+    where: { [Op.or]: [{ name }, { code }] },
+  });
+
+  if (role) {
+    return res.status(409).json({
+      error: `Role with code: "${code} or name: "${name}" already exist.`,
+    });
+  }
+
+  role = await Role.create({ name, code });
+  await role.save();
+
+  for (let i = 0; i < permissionIds.length; i++) {
+    await RolePermission.create({
+      roleId: role.id,
+      permissionId: permissionIds[i],
+    });
+  }
+
+  const createdRole = await Role.findOne({
+    where: { id: role.id },
+    include: [{ model: Permission, as: "permissions" }],
+  });
+
+  const {
+    id: roleId,
+    code: roleCode,
+    name: roleName,
+    permissions: rolePermmissions,
+  } = createdRole;
+
+  return res.status(201).json({
+    id: roleId,
+    code: roleCode,
+    name: roleName,
+    permissions: rolePermmissions.map((permission) => {
+      const {
+        id: permissionId,
+        code: permissionCode,
+        name: permissionName,
+      } = permission;
+      return {
+        id: permissionId,
+        code: permissionCode,
+        name,
+        permissionName,
+      };
+    }),
+  });
 };
 
-exports.getRoles = (req, res) => {
-  res.send("get roles route");
+exports.getRoles = async (req, res) => {
+  const roles = await Role.findAll({
+    include: [{ model: Permission, as: "permissions" }],
+  });
+
+  return res.status(200).json(
+    roles.map((role) => {
+      const { id, code, name, permissions } = role;
+      return {
+        id,
+        code,
+        name,
+        permissions: permissions.map((permission) => {
+          const { id, code, name } = permission;
+          return { id, code, name };
+        }),
+      };
+    })
+  );
 };
 
 exports.addRoleToUser = (req, res) => {
