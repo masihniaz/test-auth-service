@@ -36,7 +36,7 @@ module.exports = (sequelize, Sequelize) => {
   };
 
   User.associate = function (models) {
-    // Role belongs to many users
+    // User belongs to many roles
     User.belongsToMany(models.Role, {
       as: "roles",
       through: "user_roles",
