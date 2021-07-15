@@ -14,35 +14,40 @@ const {
   addUserRolesValidator,
   checkUserPermissionsValidator,
 } = require("../validators");
-const { checkValidation } = require("../middlewares");
+const { checkValidation, tryCatchWrapper } = require("../middlewares");
 
 router.post(
   "/permissions",
   permissionValidator,
   checkValidation,
-  createPermission
+  tryCatchWrapper(createPermission)
 );
 
-router.get("/permissions", getPermissions);
+router.get("/permissions", tryCatchWrapper(getPermissions));
 
-router.post("/roles", roleValidator, checkValidation, createRole);
+router.post(
+  "/roles",
+  roleValidator,
+  checkValidation,
+  tryCatchWrapper(createRole)
+);
 
-router.get("/roles", getRoles);
+router.get("/roles", tryCatchWrapper(getRoles));
 
 router.post(
   "/users/:id/roles",
   addUserRolesValidator,
   checkValidation,
-  addRoleToUser
+  tryCatchWrapper(addRoleToUser)
 );
 
-router.get("/users/:id/roles", getUserRoles);
+router.get("/users/:id/roles", tryCatchWrapper(getUserRoles));
 
 router.post(
   "/users/:id/permissions",
   checkUserPermissionsValidator,
   checkValidation,
-  checkUserPermissions
+  tryCatchWrapper(checkUserPermissions)
 );
 
 module.exports = router;
