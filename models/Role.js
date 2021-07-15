@@ -17,14 +17,12 @@ module.exports = (sequelize, Sequelize) => {
   );
 
   Role.associate = function (models) {
-    // Role belongs to many users
     Role.belongsToMany(models.User, {
       as: "users",
       through: "user_roles",
       foreignKey: "roleId",
     });
 
-    // Role belongs to many users
     Role.belongsToMany(models.Permission, {
       as: "permissions",
       through: "role_permissions",
