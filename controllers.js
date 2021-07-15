@@ -7,6 +7,8 @@ const {
 } = require("./models");
 const { Op } = require("sequelize");
 const jwt = require("jsonwebtoken");
+const env = process.env.NODE_ENV || "development";
+const config = require("./config/config.json")[env];
 
 exports.signup = async (req, res) => {
   const { email, username, password } = req.body;
@@ -57,8 +59,7 @@ exports.login = async (req, res) => {
     email,
   };
 
-  // load jwt secret from env later on
-  const access_token = jwt.sign(payload, "mysecret", {
+  const access_token = jwt.sign(payload, config.jwtSecret, {
     expiresIn: "24h",
   });
   return res.status(200).json({ access_token });
