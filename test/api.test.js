@@ -304,5 +304,33 @@ describe("API Tests", () => {
 
   // ------------------------------------------------------------------------------------------------------------------------------------
 
+  describe("Get Roles", (req, res) => {
+    it("Should respond with error if authorization header is not set", (done) => {
+      request(app)
+        .get("/api/roles")
+        .end((err, res) => {
+          expect(res.status).to.equal(401);
+          done();
+        });
+    });
+
+    it("Should get all available roles", (done) => {
+      request(app)
+        .get("/api/roles")
+        .set("Authorization", `Bearer ${access_token}`)
+        .end((err, res) => {
+          expect(res.status).to.equal(200);
+          expect(res.body.length).to.be.greaterThan(0);
+          expect(res.body[0]).to.have.property("id");
+          expect(res.body[0]).to.have.property("code");
+          expect(res.body[0]).to.have.property("name");
+          expect(res.body[0]).to.have.property("permissions");
+          done();
+        });
+    });
+  });
+
+  // ------------------------------------------------------------------------------------------------------------------------------------
+
   server.close();
 });
