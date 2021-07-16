@@ -12,7 +12,7 @@ module.exports = {
           updatedAt: new Date(),
         },
         {
-          userId: 1, // DEMO2
+          userId: 2, // DEMO2
           roleId: 2, // EDITOR
           createdAt: new Date(),
           updatedAt: new Date(),
