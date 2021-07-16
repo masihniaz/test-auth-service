@@ -8,7 +8,7 @@ const {
 const { Op } = require("sequelize");
 const jwt = require("jsonwebtoken");
 const env = process.env.NODE_ENV || "development";
-const config = require("../config/config.json")[env];
+const config = require("../config/config")[env];
 
 exports.signup = async (req, res) => {
   const { email, username, password } = req.body;
