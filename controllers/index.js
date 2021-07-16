@@ -205,7 +205,7 @@ exports.addRoleToUser = async (req, res) => {
   return res.status(201).json(user);
 };
 
-exports.getUserRoles = async (req, res) => {
+exports.GetRolesAssignedToUser = async (req, res) => {
   const { id: userId } = req.params;
 
   const user = await User.findOne({

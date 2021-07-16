@@ -5,7 +5,7 @@ const {
   createRole,
   getRoles,
   addRoleToUser,
-  getUserRoles,
+  GetRolesAssignedToUser,
   checkUserPermissions,
 } = require("../controllers");
 const {
@@ -41,7 +41,7 @@ router.post(
   tryCatchWrapper(addRoleToUser)
 );
 
-router.get("/users/:id/roles", tryCatchWrapper(getUserRoles));
+router.get("/users/:id/roles", tryCatchWrapper(GetRolesAssignedToUser));
 
 router.post(
   "/users/:id/permissions",
