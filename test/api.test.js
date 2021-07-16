@@ -232,5 +232,77 @@ describe("API Tests", () => {
 
   // ------------------------------------------------------------------------------------------------------------------------------------
 
+  describe("Create Role", (req, res) => {
+    it("Should respond with error if authorization header is not set", (done) => {
+      const payload = {
+        code: "ADMIN",
+        name: "Admin",
+        permissionIds: [1, 2, 3, 4],
+      };
+      request(app)
+        .post("/api/roles")
+        .send(payload)
+        .end((err, res) => {
+          expect(res.status).to.equal(401);
+          done();
+        });
+    });
+
+    it("Should respond with error if body parameters are missing", (done) => {
+      const payload = {};
+      request(app)
+        .post("/api/roles")
+        .set("Authorization", `Bearer ${access_token}`)
+        .send(payload)
+        .end((err, res) => {
+          expect(res.status).to.equal(422);
+          expect(res.body).to.have.property("errors");
+          done();
+        });
+    });
+
+    it('Should be able to create "ADMIN" role', (done) => {
+      const payload = {
+        code: "ADMIN",
+        name: "Admin",
+        permissionIds: [1, 2, 3, 4],
+      };
+      request(app)
+        .post("/api/roles")
+        .set("Authorization", `Bearer ${access_token}`)
+        .send(payload)
+        .end((err, res) => {
+          expect(res.status).to.equal(201);
+          expect(res.body).to.have.property("id");
+          expect(res.body).to.have.property("code", payload.code);
+          expect(res.body).to.have.property("name", payload.name);
+          expect(res.body).to.have.property("permissions");
+          done();
+        });
+    });
+
+    it('Should be able to create "EDITOR" role', (done) => {
+      const payload = {
+        code: "EDITOR",
+        name: "Editor",
+        permissionIds: [1, 2, 4],
+      };
+      request(app)
+        .post("/api/roles")
+        .set("Authorization", `Bearer ${access_token}`)
+        .send(payload)
+        .end((err, res) => {
+          expect(res.status).to.equal(201);
+          expect(res.body).to.have.property("id");
+          expect(res.body).to.have.property("code", payload.code);
+          expect(res.body).to.have.property("name", payload.name);
+          expect(res.body).to.have.property("permissions");
+          done();
+        });
+    });
+  });
+
+  // ------------------------------------------------------------------------------------------------------------------------------------
+
   server.close();
 });
