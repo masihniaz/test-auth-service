@@ -1,7 +1,7 @@
 {
-  "name": "server",
+  "name": "test-auth-service",
   "version": "1.0.0",
-  "description": "",
+  "description": "AirAsia Assessment: Basic auth flow service with roles and permissions.",
   "main": "app.js",
   "scripts": {
     "test": "npm run db:migrate:undo:all && npm run db:migrate && mocha --timeout 10000",
@@ -14,6 +14,14 @@
   },
   "author": "Masih Niaz",
   "license": "ISC",
+  "homepage": "https://github.com/masihniaz/test-auth-service#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/masihniaz/test-auth-service.git"
+  },
+  "bugs": {
+    "url": "https://github.com/masihniaz/test-auth-service/issues"
+  },
   "dependencies": {
     "bcrypt-nodejs": "^0.0.3",
     "chai": "^4.3.4",
@@ -32,5 +40,9 @@
   "devDependencies": {
     "nodemon": "^2.0.12",
     "sequelize-cli": "^6.2.0"
+  },
+  "engines": {
+    "npm": ">=7.20.0",
+    "node": ">=15.8.0"
   }
 }
