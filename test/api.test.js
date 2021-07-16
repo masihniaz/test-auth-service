@@ -102,6 +102,17 @@ describe("API Tests", () => {
   // ------------------------------------------------------------------------------------------------------------------------------------
 
   describe("Create Permission", () => {
+    it("Should respond with error if authorization header is not set", (done) => {
+      const payload = { code: "CREATE_USER", name: "Create User" };
+      request(app)
+        .post("/api/permissions")
+        .send(payload)
+        .end((err, res) => {
+          expect(res.status).to.equal(401);
+          done();
+        });
+    });
+
     it("Should be able to create permission", (done) => {
       const payload = { code: "CREATE_USER", name: "Create User" };
       request(app)
@@ -142,6 +153,32 @@ describe("API Tests", () => {
         .end((err, res) => {
           expect(res.status).to.equal(422);
           expect(res.body).to.have.property("errors");
+          done();
+        });
+    });
+  });
+
+  // ------------------------------------------------------------------------------------------------------------------------------------
+
+  describe("Get Permissions", () => {
+    it("Should get all available permissions", (done) => {
+      request(app)
+        .get("/api/permissions")
+        .set("Authorization", `Bearer ${access_token}`)
+        .end((err, res) => {
+          expect(res.status).to.equal(200);
+          expect(res.body.length).to.be.greaterThan(0);
+          expect(res.body[0]).to.have.property("id");
+          expect(res.body[0]).to.have.property("code");
+          expect(res.body[0]).to.have.property("name");
+          done();
+        });
+    });
+    it("Should respond with error if authorization header is not set", (done) => {
+      request(app)
+        .get("/api/permissions")
+        .end((err, res) => {
+          expect(res.status).to.equal(401);
           done();
         });
     });
