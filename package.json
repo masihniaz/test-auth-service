@@ -15,15 +15,18 @@
   "license": "ISC",
   "dependencies": {
     "bcrypt-nodejs": "^0.0.3",
+    "chai": "^4.3.4",
     "chalk": "^4.1.1",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "express-validator": "^6.12.0",
     "jsonwebtoken": "^8.5.1",
+    "mocha": "^9.0.2",
     "mysql2": "^2.2.5",
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
-    "sequelize": "^6.6.5"
+    "sequelize": "^6.6.5",
+    "supertest": "^6.1.3"
   },
   "devDependencies": {
     "nodemon": "^2.0.12",
