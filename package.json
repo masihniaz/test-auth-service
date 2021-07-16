@@ -9,6 +9,7 @@
     "db:migrate:undo:all": "sequelize db:migrate:undo:all",
     "db:migrate": "sequelize db:migrate",
     "db:seed:all": "sequelize db:seed:all",
+    "db:seed:undo:all": "sequelize db:seed:undo:all",
     "nodemon": "nodemon app.js"
   },
   "author": "Masih Niaz",
