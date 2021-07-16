@@ -5,7 +5,8 @@ const expect = chai.expect;
 
 describe("API Tests", () => {
   let access_token;
-  describe("Signup", (req, res) => {
+
+  describe("Signup", () => {
     it("Should be able to sign up with correct information", (done) => {
       const payload = {
         username: "demo",
@@ -56,7 +57,9 @@ describe("API Tests", () => {
     });
   });
 
-  describe("Login", (req, res) => {
+  // ------------------------------------------------------------------------------------------------------------------------------------
+
+  describe("Login", () => {
     it("Should be able to login with correct credentials", (done) => {
       const payload = { username: "demo", password: "password" };
       request(app)
@@ -96,7 +99,9 @@ describe("API Tests", () => {
     });
   });
 
-  describe("Create Permission", (req, res) => {
+  // ------------------------------------------------------------------------------------------------------------------------------------
+
+  describe("Create Permission", () => {
     it("Should be able to create permission", (done) => {
       const payload = { code: "CREATE_USER", name: "Create User" };
       request(app)
@@ -141,6 +146,8 @@ describe("API Tests", () => {
         });
     });
   });
+
+  // ------------------------------------------------------------------------------------------------------------------------------------
 
   server.close();
 });
