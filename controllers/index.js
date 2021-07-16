@@ -12,25 +12,20 @@ const config = require("../config/config.json")[env];
 
 exports.signup = async (req, res) => {
   const { email, username, password } = req.body;
-  try {
-    let user = await User.findOne({
-      where: { [Op.or]: [{ email }, { username }] },
+  let user = await User.findOne({
+    where: { [Op.or]: [{ email }, { username }] },
+  });
+
+  if (user) {
+    return res.status(409).json({
+      error: `User with email address: "${email}" or username: "${username}" already exists`,
     });
-
-    if (user) {
-      return res.status(409).json({
-        error: `User with email address: "${email}" or username: "${username}" already exists`,
-      });
-    }
-
-    user = await User.create({ email, username, password });
-    await user.save();
-    const { id } = user;
-    return res.status(201).json({ id, username, email });
-  } catch (e) {
-    console.log(e); // setup logger
-    return res.status(500);
   }
+
+  user = await User.create({ email, username, password });
+  await user.save();
+  const { id } = user;
+  return res.status(201).json({ id, username, email });
 };
 
 exports.login = async (req, res) => {
