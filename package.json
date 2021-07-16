@@ -5,6 +5,7 @@
   "main": "app.js",
   "scripts": {
     "test": "npm run db:migrate:undo:all && npm run db:migrate && mocha --timeout 10000",
+    "start:prod": "NODE_ENV=production node app.js",
     "start:local": "npm run db:migrate:undo:all && npm run db:migrate && npm run db:seed:all && npm run nodemon",
     "db:migrate:undo:all": "sequelize db:migrate:undo:all",
     "db:migrate": "sequelize db:migrate",
