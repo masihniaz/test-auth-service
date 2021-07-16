@@ -25,7 +25,7 @@ describe("API Tests", () => {
         });
     });
 
-    it("Should respond with error if body parameters are missing", (done) => {
+    it("Should respond with error if required request body parameters are missing", (done) => {
       const payload = {};
       request(app)
         .post("/api/signup")
@@ -86,7 +86,7 @@ describe("API Tests", () => {
           done();
         });
     });
-    it("Should respond with error if body parameters are missing", (done) => {
+    it("Should respond with error if required request body parameters are missing", (done) => {
       const payload = {};
       request(app)
         .post("/api/login")
@@ -189,7 +189,7 @@ describe("API Tests", () => {
         });
     });
 
-    it("Should respond with error if body parameters are missing", (done) => {
+    it("Should respond with error if required request body parameters are missing", (done) => {
       const payload = {};
       request(app)
         .post("/api/permissions")
@@ -248,7 +248,7 @@ describe("API Tests", () => {
         });
     });
 
-    it("Should respond with error if body parameters are missing", (done) => {
+    it("Should respond with error if required request body parameters are missing", (done) => {
       const payload = {};
       request(app)
         .post("/api/roles")
@@ -346,7 +346,7 @@ describe("API Tests", () => {
         });
     });
 
-    it("Should respond with error if body parameters are missing", (done) => {
+    it("Should respond with error if required request body parameters are missing", (done) => {
       const userId = 1;
       const payload = {};
       request(app)
@@ -452,6 +452,54 @@ describe("API Tests", () => {
         });
     });
   });
+
+  // ------------------------------------------------------------------------------------------------------------------------------------
+
+  describe("Check User Permissions", () => {
+    it("Should respond with error if authorization header is not set", (done) => {
+      const userId = 1;
+      const payload = {
+        permissionIds: [1, 2, 3, 4],
+      };
+      request(app)
+        .post(`/api/users/${userId}/permissions`)
+        .send(payload)
+        .end((err, res) => {
+          expect(res.status).to.equal(401);
+          done();
+        });
+    });
+
+    it("Should respond with error if required request body parameters are missing", (done) => {
+      const userId = 1;
+      const payload = {};
+      request(app)
+        .post(`/api/users/${userId}/permissions`)
+        .set("Authorization", `Bearer ${access_token}`)
+        .send(payload)
+        .end((err, res) => {
+          expect(res.status).to.equal(422);
+          expect(res.body).to.have.property("errors");
+          done();
+        });
+    });
+
+    it("Should respond with which permissions are allowed for user and which are not", (done) => {
+      const userId = 1;
+      const payload = { permissionIds: [1, 2, 3, 4] };
+      request(app)
+        .post(`/api/users/${userId}/permissions`)
+        .set("Authorization", `Bearer ${access_token}`)
+        .send(payload)
+        .end((err, res) => {
+          expect(res.status).to.equal(200);
+          expect(res.body[0]).to.have.property("allowed", true);
+          done();
+        });
+    });
+  });
+
+  // ------------------------------------------------------------------------------------------------------------------------------------
 
   server.close();
 });
