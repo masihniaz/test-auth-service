@@ -15,6 +15,7 @@ const sequelize = new Sequelize(
   {
     host: config.host,
     dialect: config.dialect,
+    logging: false,
   }
 );
 
@@ -40,15 +41,5 @@ Object.keys(db).forEach((modelName) => {
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
-
-const checkConnection = async () => {
-  try {
-    await sequelize.authenticate();
-    console.log("Connection has been established successfully.");
-  } catch (error) {
-    console.error("Unable to connect to the database:", error);
-  }
-};
-checkConnection();
 
 module.exports = db;
