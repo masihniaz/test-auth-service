@@ -96,5 +96,51 @@ describe("API Tests", () => {
     });
   });
 
+  describe("Create Permission", (req, res) => {
+    it("Should be able to create permission", (done) => {
+      const payload = { code: "CREATE_USER", name: "Create User" };
+      request(app)
+        .post("/api/permissions")
+        .set("Authorization", `Bearer ${access_token}`)
+        .send(payload)
+        .end((err, res) => {
+          expect(res.status).to.equal(201);
+          expect(res.body).to.have.property("id");
+          expect(res.body).to.have.property("code", payload.code);
+          expect(res.body).to.have.property("name", payload.name);
+          done();
+        });
+    });
+
+    it("Should respond with error if permission exist", (done) => {
+      const payload = { code: "CREATE_USER", name: "Create User" };
+      request(app)
+        .post("/api/permissions")
+        .set("Authorization", `Bearer ${access_token}`)
+        .send(payload)
+        .end((err, res) => {
+          expect(res.status).to.equal(409);
+          expect(res.body).to.have.property(
+            "error",
+            `Permission with name: "${payload.name}" or code: "${payload.code}" already exists`
+          );
+          done();
+        });
+    });
+
+    it("Should respond with error if body parameters are missing", (done) => {
+      const payload = {};
+      request(app)
+        .post("/api/permissions")
+        .set("Authorization", `Bearer ${access_token}`)
+        .send(payload)
+        .end((err, res) => {
+          expect(res.status).to.equal(422);
+          expect(res.body).to.have.property("errors");
+          done();
+        });
+    });
+  });
+
   server.close();
 });
