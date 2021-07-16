@@ -164,6 +164,12 @@ exports.addRoleToUser = async (req, res) => {
     ],
   });
 
+  if (!user) {
+    return res.status(404).json({
+      error: `User with ID "${userId}" not found.`,
+    });
+  }
+
   for (let i = 0; i < roleIds.length; i++) {
     for (let j = 0; j < user.roles.length; j++) {
       if (roleIds[i] === user.roles[j].id) {
@@ -216,6 +222,12 @@ exports.getUserRoles = async (req, res) => {
       },
     ],
   });
+
+  if (!user) {
+    return res.status(404).json({
+      error: `User with ID "${userId}" not found.`,
+    });
+  }
 
   return res.status(200).json(user);
 };
