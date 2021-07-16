@@ -5,10 +5,11 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start:local": "npm run db:migrate:undo:all && npm run db:migrate && npm run db:seed:all && nodemon app.js",
+    "start:local": "npm run db:migrate:undo:all && npm run db:migrate && npm run db:seed:all && npm run nodemon",
     "db:migrate:undo:all": "sequelize db:migrate:undo:all",
     "db:migrate": "sequelize db:migrate",
-    "db:seed:all": "sequelize db:seed:all"
+    "db:seed:all": "sequelize db:seed:all",
+    "nodemon": "nodemon app.js"
   },
   "author": "Masih Niaz",
   "license": "ISC",
