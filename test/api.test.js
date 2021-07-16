@@ -360,6 +360,21 @@ describe("API Tests", () => {
         });
     });
 
+    it("Should respond with error if user does not exist", (done) => {
+      const userId = 10000;
+      request(app)
+        .get(`/api/users/${userId}/roles`)
+        .set("Authorization", `Bearer ${access_token}`)
+        .end((err, res) => {
+          expect(res.status).to.equal(404);
+          expect(res.body).to.have.property(
+            "error",
+            `User with ID "${userId}" not found.`
+          );
+          done();
+        });
+    });
+
     it("Should be able to assign a list of roles to the user", (done) => {
       const userId = 1;
       const payload = { roleIds: [1, 2] };
@@ -394,6 +409,49 @@ describe("API Tests", () => {
   });
 
   // ------------------------------------------------------------------------------------------------------------------------------------
+
+  describe("Get Roles Assigned to User", () => {
+    it("Should respond with error if authorization header is not set", (done) => {
+      const userId = 1;
+      request(app)
+        .get(`/api/users/${userId}/roles`)
+        .end((err, res) => {
+          expect(res.status).to.equal(401);
+          done();
+        });
+    });
+
+    it("Should get list of roles assigned to the user", (done) => {
+      const userId = 1;
+      request(app)
+        .get(`/api/users/${userId}/roles`)
+        .set("Authorization", `Bearer ${access_token}`)
+        .end((err, res) => {
+          expect(res.status).to.equal(200);
+          expect(res.body).to.have.property("roles");
+          expect(res.body.roles.length).to.equal(2);
+          expect(res.body.roles[0]).to.have.property("id");
+          expect(res.body.roles[0]).to.have.property("code");
+          expect(res.body.roles[0]).to.have.property("name");
+          done();
+        });
+    });
+
+    it("Should respond with error if user does not exist", (done) => {
+      const userId = 10000;
+      request(app)
+        .get(`/api/users/${userId}/roles`)
+        .set("Authorization", `Bearer ${access_token}`)
+        .end((err, res) => {
+          expect(res.status).to.equal(404);
+          expect(res.body).to.have.property(
+            "error",
+            `User with ID "${userId}" not found.`
+          );
+          done();
+        });
+    });
+  });
 
   server.close();
 });
