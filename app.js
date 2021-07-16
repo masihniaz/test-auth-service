@@ -20,6 +20,8 @@ app.use(passport.authenticate("jwt", jwtOpt));
 app.use("/api", protectedRoutes);
 app.use(errorHandler);
 
-app.listen(port, () => {
+const server = app.listen(port, () => {
   console.log(`Server running on port: ${port}`);
 });
+
+module.exports = { app, server };
