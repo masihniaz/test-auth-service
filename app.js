@@ -1,6 +1,6 @@
 const express = require("express");
 const passport = require("passport");
-const { User } = require("./models");
+const { User } = require("./db/models");
 const cors = require("cors");
 const { configurePassport } = require("./middlewares");
 const authRoutes = require("./routes/auth");

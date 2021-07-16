@@ -4,7 +4,7 @@ const {
   Role,
   RolePermission,
   UserRole,
-} = require("../models");
+} = require("../db/models");
 const { Op } = require("sequelize");
 const jwt = require("jsonwebtoken");
 const env = process.env.NODE_ENV || "development";
