@@ -232,7 +232,7 @@ describe("API Tests", () => {
 
   // ------------------------------------------------------------------------------------------------------------------------------------
 
-  describe("Create Role", (req, res) => {
+  describe("Create Role", () => {
     it("Should respond with error if authorization header is not set", (done) => {
       const payload = {
         code: "ADMIN",
@@ -304,7 +304,7 @@ describe("API Tests", () => {
 
   // ------------------------------------------------------------------------------------------------------------------------------------
 
-  describe("Get Roles", (req, res) => {
+  describe("Get Roles", () => {
     it("Should respond with error if authorization header is not set", (done) => {
       request(app)
         .get("/api/roles")
@@ -325,6 +325,69 @@ describe("API Tests", () => {
           expect(res.body[0]).to.have.property("code");
           expect(res.body[0]).to.have.property("name");
           expect(res.body[0]).to.have.property("permissions");
+          done();
+        });
+    });
+  });
+
+  // ------------------------------------------------------------------------------------------------------------------------------------
+
+  describe("Add Role to User", () => {
+    it("Should respond with error if authorization header is not set", (done) => {
+      const userId = 1;
+      const payload = {
+        roleIds: [1, 2],
+      };
+      request(app)
+        .post(`/api/users/${userId}/roles`)
+        .end((err, res) => {
+          expect(res.status).to.equal(401);
+          done();
+        });
+    });
+
+    it("Should respond with error if body parameters are missing", (done) => {
+      const userId = 1;
+      const payload = {};
+      request(app)
+        .post(`/api/users/${userId}/roles`)
+        .set("Authorization", `Bearer ${access_token}`)
+        .send(payload)
+        .end((err, res) => {
+          expect(res.status).to.equal(422);
+          expect(res.body).to.have.property("errors");
+          done();
+        });
+    });
+
+    it("Should be able to assign a list of roles to the user", (done) => {
+      const userId = 1;
+      const payload = { roleIds: [1, 2] };
+      request(app)
+        .post(`/api/users/${userId}/roles`)
+        .set("Authorization", `Bearer ${access_token}`)
+        .send(payload)
+        .end((err, res) => {
+          expect(res.status).to.equal(201);
+          expect(res.body).to.have.property("roles");
+          expect(res.body.roles.length).to.equal(2);
+          done();
+        });
+    });
+
+    it("Should respond with error if role is already assinged", (done) => {
+      const userId = 1;
+      const payload = { roleIds: [1] };
+      request(app)
+        .post(`/api/users/${userId}/roles`)
+        .set("Authorization", `Bearer ${access_token}`)
+        .send(payload)
+        .end((err, res) => {
+          expect(res.status).to.equal(409);
+          expect(res.body).to.have.property(
+            "error",
+            `User has already been assigned the role ID "1"`
+          );
           done();
         });
     });
