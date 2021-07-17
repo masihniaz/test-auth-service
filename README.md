@@ -37,6 +37,8 @@ yarn install
 npm run start:local
 ```
 
+- When started localy the project will use SQLITE
+
 ## Run tests
 
 ```sh
@@ -61,4 +63,3 @@ Give a ⭐️ if this project helped you!
 ## 📝 License
 
 Copyright © 2021 [Masih Niaz](https://github.com/masihniaz).<br />
-This project is [ISC](https://github.com/masihniaz/test-auth-service/blob/master/LICENSE) licensed.
