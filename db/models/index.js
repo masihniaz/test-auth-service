@@ -8,16 +8,17 @@ const env = process.env.NODE_ENV || "development";
 const config = require("../../config/config")[env];
 const db = {};
 
-const sequelize = new Sequelize(
-  config.database,
-  config.username,
-  config.password,
-  {
+let sequelize;
+
+if (env === "development") {
+  sequelize = new Sequelize(config);
+} else {
+  sequelize = new Sequelize(config.database, config.username, config.password, {
     host: config.host,
     dialect: config.dialect,
     logging: false,
-  }
-);
+  });
+}
 
 fs.readdirSync(__dirname)
   .filter((file) => {

@@ -15,7 +15,7 @@ const jwtOpt = { session: false };
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use("/api", (req, res) =>
+app.get("/api", (req, res) =>
   res.status(200).json({ version: require("./package.json").version })
 );
 app.use("/api", authRoutes);
