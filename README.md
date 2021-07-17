@@ -37,7 +37,7 @@ yarn install
 npm run start:local
 ```
 
-- When started localy the project will use SQLITE
+- When started locally the project will use SQLITE
 
 ## Run tests
 
