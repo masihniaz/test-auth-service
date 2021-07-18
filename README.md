@@ -47,7 +47,7 @@ npm run test
 
 ## Entity Relationship Diagram (ERD)
 
-<img alt="License: ISC" src="https://ibb.co/f4TMXgF" />
+<a href="https://ibb.co/f4TMXgF"><img src="https://i.ibb.co/qk2BDSj/ERD.png" alt="ERD" border="0"></a>
 
 ## Author
 
