@@ -49,6 +49,12 @@ npm run test
 
 <a href="https://ibb.co/ZTLYJck"><img src="https://i.ibb.co/4NmYf45/ERD.jpg" alt="ERD" border="0"></a>
 
+## Sequence Diagram
+
+Due to lack of time I only created the sequence diagram for signup process
+
+<a href="https://ibb.co/Jsvfbvk"><img src="https://i.ibb.co/4V86D8N/Sequence-Diagram.jpg" alt="Sequence-Diagram" border="0"></a><br /><a target='_blank' href='https://imgbb.com/'>uploading pictures</a><br />
+
 ## Author
 
 👤 **Masih Niaz**
