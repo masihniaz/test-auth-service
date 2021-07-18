@@ -45,6 +45,10 @@ npm run start:local
 npm run test
 ```
 
+## Entity Relationship Diagram (ERD)
+
+<img alt="License: ISC" src="https://ibb.co/f4TMXgF" />
+
 ## Author
 
 👤 **Masih Niaz**
