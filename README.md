@@ -51,7 +51,7 @@ npm run test
 
 ## Sequence Diagram
 
-Due to lack of time I only created the sequence diagram for signup process
+Sequence diagram for signup process
 
 <a href="https://ibb.co/Jsvfbvk"><img src="https://i.ibb.co/4V86D8N/Sequence-Diagram.jpg" alt="Sequence-Diagram" border="0"></a><br /><a target='_blank' href='https://imgbb.com/'>uploading pictures</a><br />
 
