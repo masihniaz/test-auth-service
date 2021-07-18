@@ -493,7 +493,7 @@ describe("API Tests", () => {
         .send(payload)
         .end((err, res) => {
           expect(res.status).to.equal(200);
-          expect(res.body[0]).to.have.property("allowed", true);
+          expect(res.body[0]).to.have.property("isAllowed", "Yes");
           done();
         });
     });

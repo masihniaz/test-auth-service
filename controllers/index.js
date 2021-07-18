@@ -269,7 +269,7 @@ exports.checkUserPermissions = async (req, res) => {
           id,
           code,
           name,
-          allowed: true,
+          isAllowed: "Yes",
         };
       }
     });
@@ -290,7 +290,7 @@ exports.checkUserPermissions = async (req, res) => {
     })
   ).map((permission) => {
     const { id, code, name } = permission;
-    return { id, code, name, allowed: false };
+    return { id, code, name, isAllowed: "No" };
   });
 
   return res
