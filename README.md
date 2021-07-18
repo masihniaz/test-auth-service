@@ -37,6 +37,11 @@ yarn install
 npm run start:local
 ```
 
+## Seed Users
+
+- username: demo1 | password: password
+- username: demo2 | password: password
+
 - When started locally the project will use SQLITE
 
 ## Run tests
