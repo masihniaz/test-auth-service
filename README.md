@@ -51,15 +51,3 @@ npm run test
 
 - Github: [@masihniaz](https://github.com/masihniaz)
 - LinkedIn: [@https:\/\/www.linkedin.com\/in\/masih-niaz-543527148\/](https://linkedin.com/in/https://www.linkedin.com/in/masih-niaz-543527148/)
-
-## 🤝 Contributing
-
-Contributions, issues and feature requests are welcome!<br />Feel free to check [issues page](https://github.com/masihniaz/test-auth-service/issues).
-
-## Show your support
-
-Give a ⭐️ if this project helped you!
-
-## 📝 License
-
-Copyright © 2021 [Masih Niaz](https://github.com/masihniaz).<br />
